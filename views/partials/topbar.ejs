@@ -1,0 +1,13 @@
+<navbar class="p-2 d-flex flex-row justify-content-between align-items-center">
+  <a href="/">
+    <img class="logo" src="/images/logo.png" alt="logo dyma" />
+  </a>
+  <div class="d-flex flex-row">
+    <% if (user) { %>
+    <div id="logout" class="mx-3">Deconnexion</div>
+    <% } else { %>
+    <a href="/users/new" class="mx-3">Inscription</a>
+    <a href="/auth/signin/form" class="mx-3">Connexion</a>
+    <% } %>
+  </div>
+</navbar>

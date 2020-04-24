@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Mon title</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/javascripts/index.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/socket.js"></script>
+    <script src="/javascripts/socket-display.js"></script>
+    <script src="/javascripts/socket-input.js"></script>
+  </head>
+  <body class="d-flex flex-column">
+    <div class="container-fluid flex-fill d-flex flex-column">
+      <%- include('partials/topbar.ejs', user) %>
+      <div class="container-fluid flex-fill d-flex flex-row">
+        <%- include('partials/namespaces') %> <%- include('partials/rooms') %>
+        <%- include('partials/chat') %>
+      </div>
+    </div>
+  </body>
+</html>
