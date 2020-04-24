@@ -4,8 +4,8 @@ mongoose
   .connect(
     "mongodb+srv://jean:123@cluster0-urpjt.gcp.mongodb.net/nodechapitre32?retryWrites=true",
     {
-      useCreateIndex: true,
       useNewUrlParser: true,
+      useUnifiedTopology: true,
     }
   )
   .then(() => {
