@@ -2,10 +2,7 @@ const { Namespace, Room } = require('./models');
 const mongoose = require('mongoose');
 
 mongoose
-  .connect('VOTRE DB', {
-    useCreateIndex: true,
-    useNewUrlParser: true,
-  })
+  .connect('VOTRE DB')
   .then(() => {
     console.log('connexion ok !');
 
