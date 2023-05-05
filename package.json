@@ -20,7 +20,7 @@
     "express-session": "^1.17.3",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.3",
+    "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22",
     "socket.io": "^4.6.1"
