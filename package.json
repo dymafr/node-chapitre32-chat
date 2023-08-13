@@ -19,10 +19,10 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "http-errors": "^2.0.0",
-    "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.1.0",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.4.3",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.22",
-    "socket.io": "^4.6.1"
+    "nodemon": "^3.0.1",
+    "socket.io": "^4.7.2"
   }
 }
