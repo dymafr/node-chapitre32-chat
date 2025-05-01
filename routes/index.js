@@ -11,6 +11,6 @@ router.get("/", (req, res) => {
     : res.redirect("/auth/signin/form");
 });
 
-router.get("*", (req, res) => res.redirect("/"));
+router.get("/{*splat}", (req, res) => res.redirect("/"));
 
 module.exports = router;
