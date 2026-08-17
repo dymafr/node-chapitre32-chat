@@ -1,7 +1,19 @@
-const secret = "a2463421-b798-470a-b4ee-fd23783ec69d";
+// Ce secret signe tous les jetons : qui le connaît peut en fabriquer un
+// valide pour n'importe quel utilisateur. Il vient donc de l'environnement.
+const secret = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
 const { findUserPerId } = require("../queries/user.queries");
 const { app } = require("../app");
+
+// Le cookie qui porte le jeton doit être posé avec ces trois options :
+// httpOnly le rend invisible au JavaScript de la page, sameSite l"empêche de
+// partir avec une requête venue d"un autre site, et secure lui interdit de
+// circuler en clair en production.
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: "lax",
+  secure: process.env.NODE_ENV === "production",
+};
 
 const createJwtToken = ({ user = null, id = null }) => {
   const jwtToken = jwt.sign(
@@ -23,7 +35,7 @@ const checkExpirationToken = (token, res) => {
     return token;
   } else if (nowInSec > tokenExp && nowInSec - tokenExp < 60 * 60 * 24) {
     const refreshedToken = createJwtToken({ id: token.sub });
-    res.cookie("jwt", refreshedToken);
+    res.cookie("jwt", refreshedToken, cookieOptions);
     return jwt.decode(refreshedToken);
   } else {
     throw new Error("token expired");
@@ -49,11 +61,11 @@ const extractUserFromToken = async (req, res, next) => {
         req.user = user;
         next();
       } else {
-        res.clearCookie("jwt");
+        res.clearCookie("jwt", cookieOptions);
         res.redirect("/");
       }
     } catch (e) {
-      res.clearCookie("jwt");
+      res.clearCookie("jwt", cookieOptions);
       res.redirect("/");
     }
   } else {
@@ -63,10 +75,10 @@ const extractUserFromToken = async (req, res, next) => {
 
 const addJwtFeatures = (req, res, next) => {
   req.isAuthenticated = () => !!req.user;
-  req.logout = () => res.clearCookie("jwt");
+  req.logout = () => res.clearCookie("jwt", cookieOptions);
   req.login = (user) => {
     const token = createJwtToken({ user });
-    res.cookie("jwt", token);
+    res.cookie("jwt", token, cookieOptions);
   };
   next();
 };

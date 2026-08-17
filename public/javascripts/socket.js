@@ -3,6 +3,9 @@ let namespaceSockets = [];
 let rooms = [];
 let init = false;
 let activeNsSocket;
+// firstRoom était affectée sans être déclarée : elle devenait une
+// variable globale implicite, ce qui lève une ReferenceError en mode strict.
+let firstRoom;
 let activeRoom;
 let messages = [];
 
@@ -48,20 +51,14 @@ function activateNamespace(nsSocket) {
   firstRoom = rooms.find(
     (room) => `/${room.namespace}` === activeNsSocket.nsp && room.index === 0
   );
+  // Un namespace sans room est possible : il ne faut pas continuer comme si
+  // firstRoom existait toujours.
+  if (!firstRoom) {
+    return;
+  }
   activateRoom(firstRoom);
   displayRooms(
     rooms.filter((room) => `/${room.namespace}` === activeNsSocket.nsp),
     firstRoom._id
   );
 }
-
-setTimeout(() => {
-  console.log({
-    namespaces,
-    namespaceSockets,
-    rooms,
-    activeNsSocket,
-    activeRoom,
-    messages,
-  });
-}, 3000);

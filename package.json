@@ -4,24 +4,24 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "NODE_ENV=development node --watch app.js",
-    "start:prod": "NODE_ENV=production node app.js",
+    "start": "node --watch --env-file=.env app.js",
+    "start:prod": "node --env-file=.env.production app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "node ./database/seed.js"
+    "seed": "node --env-file=.env ./database/seed.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
-    "ejs": "^3.1.10",
-    "errorhandler": "^1.5.1",
-    "express": "^5.1.0",
-    "express-session": "^1.18.1",
-    "http-errors": "^2.0.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.14.1",
-    "morgan": "^1.10.0",
-    "socket.io": "^4.8.1"
+    "ejs": "^6.0.1",
+    "errorhandler": "^1.5.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "http-errors": "^2.0.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.2",
+    "morgan": "^1.11.0",
+    "socket.io": "^4.8.3"
   }
 }

@@ -1,79 +1,41 @@
-const { Namespace, Room } = require('./models');
+const { Room } = require('./models');
+const { Namespace } = require('./models');
 const mongoose = require('mongoose');
 
-mongoose
-  .connect('VOTRE DB')
-  .then(() => {
-    console.log('connexion ok !');
+// L'URL de connexion contient un identifiant et un mot de passe : elle n'a
+// rien à faire dans le code. Nous la lisons dans l'environnement.
+const MONGO_URL = process.env.MONGO_URL;
 
-    const ns1 = new Namespace({
-      imgUrl: '/images/angular.png',
-    });
+const NAMESPACES = [
+  '/images/angular.png',
+  '/images/vue.png',
+  '/images/react.png',
+];
 
-    const ns2 = new Namespace({
-      imgUrl: '/images/vue.png',
-    });
+const TITRES_DE_ROOMS = ['Général', 'Hors sujet'];
 
-    const ns3 = new Namespace({
-      imgUrl: '/images/react.png',
-    });
+const seed = async () => {
+  await mongoose.connect(MONGO_URL);
+  console.log('connexion ok !');
 
-    ns1
-      .save()
-      .then((namespace) => {
-        console.log('ns1 created');
-        const room1 = new Room({
-          namespace: namespace._id,
-          index: 0,
-          title: 'Général',
-        });
-        const room2 = new Room({
-          namespace: namespace._id,
-          index: 1,
-          title: 'Hors sujet',
-        });
-        Promise.all([room1.save(), room2.save()]).then(() => {
-          console.log("ns1's room created");
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  for (const imgUrl of NAMESPACES) {
+    const namespace = await new Namespace({ imgUrl }).save();
+    console.log(`namespace ${imgUrl} créé`);
 
-    ns2.save().then((namespace) => {
-      console.log('ns2 created');
-      const room1 = new Room({
-        namespace: namespace._id,
-        index: 0,
-        title: 'Général',
-      });
-      const room2 = new Room({
-        namespace: namespace._id,
-        index: 1,
-        title: 'Hors sujet',
-      });
-      Promise.all([room1.save(), room2.save()]).then(() => {
-        console.log("ns2's room created");
-      });
-    });
+    await Promise.all(
+      TITRES_DE_ROOMS.map((title, index) =>
+        new Room({ namespace: namespace._id, index, title }).save()
+      )
+    );
+    console.log(`rooms de ${imgUrl} créées`);
+  }
+};
 
-    ns3.save().then((namespace) => {
-      console.log('ns3 created');
-      const room1 = new Room({
-        namespace: namespace._id,
-        index: 0,
-        title: 'Général',
-      });
-      const room2 = new Room({
-        namespace: namespace._id,
-        index: 1,
-        title: 'Hors sujet',
-      });
-      Promise.all([room1.save(), room2.save()]).then(() => {
-        console.log("ns3's room created");
-      });
-    });
+// Sans la déconnexion, le processus reste en vie indéfiniment : une connexion
+// Mongoose ouverte suffit à retenir la boucle d'événements.
+seed()
+  .catch((e) => {
+    console.error(e);
+    process.exitCode = 1;
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .finally(() => mongoose.disconnect());
